@@ -1,0 +1,123 @@
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Courier New', monospace;
+  background: #0a0a0a;
+  color: #00ffff;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 2rem;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #00ffff;
+  text-shadow: 0 0 10px #00ffff;
+}
+
+.neon-input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  background: #0a0a0a;
+  border: 1px solid #00ffff;
+  color: #00ffff;
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+.neon-input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #ff00ff;
+  box-shadow: 0 0 10px #ff00ff;
+}
+
+.neon-button {
+  display: block;
+  width: 100%;
+  padding: 0.8rem;
+  background: #000;
+  color: #00ffff;
+  border: 1px solid #00ffff;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: 0.3s;
+  border-radius: 6px;
+}
+
+.neon-button:hover {
+  background: linear-gradient(145deg, #00ffff, #ff00ff);
+  color: #000;
+  box-shadow: 0 0 20px #00ffff;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.neon-checkbox {
+  accent-color: #00ffff;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.signup-text {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.signup-text a {
+  color: #ff00ff;
+  text-decoration: none;
+}
+
+.signup-text a:hover {
+  text-shadow: 0 0 5px #ff00ff;
+}
+
+.setting {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.leaderboard {
+  list-style: none;
+  padding: 0;
+}
+
+.leaderboard li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8rem;
+  border: 1px solid #00ffff;
+  background: #0a0a0a;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.leaderboard li:hover {
+  border-color: #ff00ff;
+  box-shadow: 0 0 10px #ff00ff;
+}
+
+.leaderboard li span:first-child {
+  font-weight: bold;
+  color: #ff00ff;
+  margin-right: 1rem;
+}
