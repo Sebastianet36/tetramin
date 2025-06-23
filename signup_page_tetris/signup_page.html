@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="signup_page.css" />
+  <link rel="stylesheet" href="#" />
+
 </head>
 <body>
   <div class="container">
@@ -12,35 +12,34 @@
       <h1>Crea tu perfil</h1>
     </header>
     <div class="card">
-      <form>
-        <div class="input-group">
-          <label for="firstName">Nombre de usuario</label>
-          <input type="text" id="firstName"/>
-        </div>
-        <div class="input-group">
-          <label for="email">Email Address</label>
-          <input type="email" id="email"/>
-        </div>
-        <div class="input-group">
-          <label for="phone">Phone Number</label>
-          <input type="tel" id="phone"/>
-        </div>
-        <div class="input-group">
-          <label for="location">Location</label>
-          <select id="location">
-            <option>Select your city</option>
-            <option>New York, NY</option>
-            <option>San Francisco, CA</option>
-            <option>Los Angeles, CA</option>
-            <option>Chicago, IL</option>
-            <option>Miami, FL</option>
-          </select>
-        </div>
-        <div class="actions">
-          <button type="button" class="btn outline">Previous</button>
-          <button type="submit" class="btn primary">CREAR</button>
-        </div>
-      </form>
+        <form action="procesar_signup.php" name="tetrisdb" method="post">
+          <div class="input-group">
+            <label for="firstName">Nombre de usuario</label>
+            <input type="text" id="firstName" name="nombre_usuario" required />
+          </div>
+          <div class="input-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+          <div class="input-group">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" name="contraseña" required />
+          </div>
+          <div class="input-group">
+            <label for="location">Location</label>
+            <select id="location" name="ubicacion" required>
+              <option disabled selected>Selecciona tu ciudad</option>
+              <option>New York, NY</option>
+              <option>San Francisco, CA</option>
+              <option>Los Angeles, CA</option>
+              <option>Chicago, IL</option>
+              <option>Miami, FL</option>
+            </select>
+          </div>
+          <div class="actions">
+            <button type="submit" class="btn primary" name="crear">CREAR</button>
+          </div>
+        </form>
     </div>
   </div>
   <footer>
