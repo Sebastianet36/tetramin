@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (!isset($_SESSION['nombre_usuario'])) {
+    header("Location: /html-css/signin_page_tetris/signin.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,14 +19,16 @@
         <div class="header">
             <div class="header-left">Leaderboard</div>
             <div class="header-right">
-                <div class="account-name">Nombre cuenta</div>
-                <div class="profile">Perfil</div>
+                <div class="account-name">
+                    <?php echo htmlspecialchars($_SESSION['nombre_usuario']); ?>
+                </div>
+                <div class="profile"><a href="/html&css/p.config_page_tetris/profile.html">Perfil</a></div>
             </div>
         </div>
         
         <div class="main-content">
             <div class="sidebar">
-                <h3>Top 10 globalest</h3>
+                <h3><a href="/html-css/leaderboard_page_tetris/leaderboard.html">Top 10 globalest</a></h3>
             </div>
             
             <div class="content">
@@ -26,7 +36,7 @@
                 <div class="mode">Modo 2</div>
                 <div class="mode">Modo 3</div>
                 <div class="mode">Modo 4</div>
-                <div class="mode">Configuraciones</div>
+                <div class="mode"><a href="/html-css/g.confi_page_tetris/config.html"></a>Configuraciones</div>
             </div>
         </div>
         <footer>
