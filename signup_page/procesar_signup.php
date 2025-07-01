@@ -21,7 +21,7 @@ if (isset($_POST['crear'])) {
     $ubicacion = $_POST['ubicacion'];
     $fecha = date("Y-m-d H:i:s");
 
-    $stmt = $enlace->prepare("INSERT INTO Usuarios (nombre_usuario, email, contraseña, fecha_registro, es_admin, usuario_activo, ubicacion) VALUES (?, ?, ?, ?, 0, 1, ?)");
+    $stmt = $enlace->prepare("INSERT INTO usuarios (nombre_usuario, email, contraseña, fecha_registro, es_admin, usuario_activo, ubicacion) VALUES (?, ?, ?, ?, 0, 1, ?)");
     $stmt->bind_param("sssss", $nombre, $email, $passHash, $fecha, $ubicacion);
 
     if ($stmt->execute()) {

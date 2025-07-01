@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['nombre_usuario'])) {
-    header("Location: /Tetris-front/signin_page/signin.php");
+    header("Location: /Tetris-front/signin_page/signin.html");
     exit();
 }
 ?>
@@ -22,7 +22,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                 <div class="account-name">
                     <?php echo htmlspecialchars($_SESSION['nombre_usuario']); ?>
                 </div>
-                <a href="/Tetris-front/p.config_page/profile.html" style="text-decoration: none;">
+                <a href="/Tetris-front/perfil_page/perfil.html" style="text-decoration: none;">
                     <div class="profile">Perfil</div>
                 </a>
             </div>

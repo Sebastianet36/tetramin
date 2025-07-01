@@ -12,7 +12,7 @@
         <!-- Header -->
         <div class="header">
             <?php echo strtoupper(htmlspecialchars($_SESSION['nombre_usuario'])); ?>
-            <a href="#" class="back-button">← Go Back</a>
+            <a href="Tetris-front/main_page/main_registrados.php" class="back-button">Atras</a>
         </div>
 
         <!-- Main Content -->
@@ -43,7 +43,7 @@
             <div class="records-section">
                 <!-- Record Mode 1 -->
                 <div class="record-mode">
-                    <div class="mode-title">Record Mode 1</div>
+                    <div class="mode-title">Record Modo 1</div>
                     <div class="mode-stats">
                         <div class="mode-stat">
                             <div class="mode-stat-label">Total Pieces</div>
@@ -62,7 +62,7 @@
 
                 <!-- Record Mode 2 -->
                 <div class="record-mode">
-                    <div class="mode-title">Record Mode 2</div>
+                    <div class="mode-title">Record Modo 2</div>
                     <div class="mode-stats">
                         <div class="mode-stat">
                             <div class="mode-stat-label">Total Pieces</div>
@@ -81,7 +81,7 @@
 
                 <!-- Record Mode 3 -->
                 <div class="record-mode">
-                    <div class="mode-title">Record Mode 3</div>
+                    <div class="mode-title">Record Modo 3</div>
                     <div class="mode-stats">
                         <div class="mode-stat">
                             <div class="mode-stat-label">Total Pieces</div>
@@ -100,7 +100,7 @@
 
                 <!-- Record Mode 4 -->
                 <div class="record-mode">
-                    <div class="mode-title">Record Mode 4</div>
+                    <div class="mode-title">Record Modo 4</div>
                     <div class="mode-stats">
                         <div class="mode-stat">
                             <div class="mode-stat-label">Total Pieces</div>

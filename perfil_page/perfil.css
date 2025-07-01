@@ -237,8 +237,8 @@
     @keyframes record-scan {
         0%, 100% { border-color: #00ffff; }
         25% { border-color: #ff00ff; }
-        50% { border-color: #00ff00; }
-        75% { border-color: #ffff00; }
+        50% { border-color: #00ffff; }
+        75% { border-color: #ff00ff; }
     }
 
     .record-mode:hover {
