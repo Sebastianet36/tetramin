@@ -369,15 +369,60 @@ body::after {
     to { filter: brightness(1.3) saturate(1.2); }
 }
 
-.login-container .signup {
+.login-container .bottom-options{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+}
+
+.login-container .modo_invitado{
     text-align: center;
     margin-top: 2rem;
     font-size: 0.9rem;
     color: #ff00ff;
     display: flex;
+    align-items: center;
+    transition: all 0.5s ease;
+    width: 150px;
+}
+
+.login-container .modo_invitado:hover{
+    border: 1px solid #00ffff;
+    transform: translateY(3px);
+    transform: scale(1.1);
+    background: linear-gradient(145deg, #0a0a0a 0%, #1a1a1a 100%);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    border-radius: 9px;
+}
+
+.login-container .modo_invitado a {
+    text-decoration: none;
+    color: #ff00ff;
+    font-weight: 700;
+    transition: all 0.5s ease;
+    position: relative;
+}
+
+.login-container .modo_invitado a:hover {
+    text-shadow: 0 0 10px #00ff2a;
+    transform: translateY(-1px);
+    color: #00ff2a;
+}
+
+
+
+
+.login-container .signup {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    color: #ff00ff;
+    display: flex;
     flex-direction: column;
     gap: 0.5rem;
     animation: signup-fade-in 1s ease-out 1s both;
+    width: 150px;
 }
 
 @keyframes signup-fade-in {
@@ -395,7 +440,7 @@ body::after {
     text-decoration: none;
     color: #ff00ff;
     font-weight: 700;
-    transition: all 0.3s ease;
+    transition: all 0.5s ease;
     position: relative;
 }
 
@@ -407,7 +452,7 @@ body::after {
     width: 0;
     height: 2px;
     background: linear-gradient(45deg, #ff00ff, #00ffff);
-    transition: all 0.3s ease;
+    transition: all 0.5s ease;
     transform: translateX(-50%);
 }
 
@@ -418,7 +463,10 @@ body::after {
 .login-container .signup a:hover {
     text-shadow: 0 0 10px #ff00ff;
     transform: translateY(-1px);
+    transform: scale(1.1);
+
 }
+
 
 /* Responsive design */
 @media (max-width: 480px) {

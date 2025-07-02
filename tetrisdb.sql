@@ -151,7 +151,7 @@ INSERT INTO `usuariomodojuego` (`id_usuario_modo`, `id_usuario`, `id_modo`) VALU
 --
 
 CREATE TABLE `usuarios` (
-  `id_usuario` int(6) NOT NULL,
+  `id_usuario` int(6) NOT NULL AUTO_INCREMENT,
   `nombre_usuario` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `contraseña` varchar(255) NOT NULL,

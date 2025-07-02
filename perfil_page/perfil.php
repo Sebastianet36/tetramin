@@ -29,12 +29,12 @@
                 <!-- Stats Card -->
                 <div class="stats-card">
                     <div class="stat-item">
-                        <span class="stat-label">Hours Played</span>
+                        <span class="stat-label">Horas jugadas</span>
                         <span class="stat-value">247.5</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">User Level</span>
-                        <span class="stat-value">Level 42</span>
+                        <span class="stat-label">Nivel</span>
+                        <span class="stat-value">42</span>
                     </div>
                 </div>
             </div>
@@ -43,7 +43,7 @@
             <div class="records-section">
                 <!-- Record Mode 1 -->
                 <div class="record-mode">
-                    <div class="mode-title">Record Modo 1</div>
+                    <div class="mode-title">Record Clasico</div>
                     <div class="mode-stats">
                         <div class="mode-stat">
                             <div class="mode-stat-label">Total Pieces</div>
@@ -62,7 +62,7 @@
 
                 <!-- Record Mode 2 -->
                 <div class="record-mode">
-                    <div class="mode-title">Record Modo 2</div>
+                    <div class="mode-title">Record Carrera</div>
                     <div class="mode-stats">
                         <div class="mode-stat">
                             <div class="mode-stat-label">Total Pieces</div>
@@ -81,7 +81,7 @@
 
                 <!-- Record Mode 3 -->
                 <div class="record-mode">
-                    <div class="mode-title">Record Modo 3</div>
+                    <div class="mode-title">Record Excavar</div>
                     <div class="mode-stats">
                         <div class="mode-stat">
                             <div class="mode-stat-label">Total Pieces</div>
@@ -100,7 +100,7 @@
 
                 <!-- Record Mode 4 -->
                 <div class="record-mode">
-                    <div class="mode-title">Record Modo 4</div>
+                    <div class="mode-title">Record Chill-Out</div>
                     <div class="mode-stats">
                         <div class="mode-stat">
                             <div class="mode-stat-label">Total Pieces</div>
@@ -121,7 +121,7 @@
 
         <!-- Configurations Section -->
         <div class="configurations">
-            <h2 class="config-title">Configurations</h2>
+            <h2 class="config-title">Configuracion</h2>
         </div>
     </div>
 </body>
