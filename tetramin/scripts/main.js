@@ -1,10 +1,5 @@
 import { Game } from "/Tetris-front/tetramin/scripts/game.js";
 
-let isPaused = false;
-let animationId = null;
-let game;
-let countdown = 3;
-
 const canvasTetris = document.getElementById("canvas-tetris");
 const canvasNext = document.getElementById("canvas-next");
 const canvasHold = document.getElementById("canvas-hold");
@@ -13,30 +8,54 @@ const canvasLevel = document.getElementById("canvas-level");
 const canvasTime = document.getElementById("canvas-time");
 const canvasScore = document.getElementById("canvas-score");
 
-const ctx = canvasTetris.getContext("2d");
+canvasLines.width = 130;
+canvasLines.height = 110;
+canvasLevel.width = 130;
+canvasLevel.height = 110;
+canvasTime.width = 280;
+canvasTime.height = 110;
+canvasScore.width = 280;
+canvasScore.height = 110;
+canvasNext.width = 130;
+canvasNext.height = 300;
+
+const rows = 20;
+const cols = 10;
+const cellSize = 26;
+const space = 2;
+
+let game = new Game(
+    canvasTetris,
+    rows,
+    cols,
+    cellSize,
+    space,
+    canvasNext,
+    canvasHold,
+    canvasLines,
+    canvasLevel,
+    canvasTime,
+    canvasScore
+);
+
+game.initializeHUD();
+game.boardTetris.draw();
+game.next.draw2();
+game.hold.draw2();
+game.drawTetrominoGhost();
+game.currentTetromino.draw(game.boardTetris);
 
 function gameLoop() {
-    if (isPaused) return;
-
     if (!game.isGameOver) {
         game.update();
-        animationId = requestAnimationFrame(gameLoop);
-    }
-}
-
-function togglePause() {
-    if (!isPaused) {
-        isPaused = true;
-        cancelAnimationFrame(animationId);
-        game.setPaused(true);
-    } else {
-        isPaused = false;
-        game.setPaused(false);
         requestAnimationFrame(gameLoop);
+    } else {
+        console.log("Game Over");
     }
 }
 
 function drawCountdown(number) {
+    const ctx = canvasTetris.getContext("2d");
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.save();
     ctx.font = "80px 'Orbitron', sans-serif";
@@ -49,7 +68,8 @@ function drawCountdown(number) {
     ctx.restore();
 }
 
-function fadeOutGO() {
+function fadeOutGO(callback) {
+    const ctx = canvasTetris.getContext("2d");
     let opacity = 1;
     const fadeInterval = setInterval(() => {
         ctx.clearRect(0, 0, canvasTetris.width, canvasTetris.height);
@@ -68,50 +88,29 @@ function fadeOutGO() {
         if (opacity <= 0) {
             clearInterval(fadeInterval);
             ctx.clearRect(0, 0, canvasTetris.width, canvasTetris.height);
-            togglePause(); // ← arranca el juego real
+            callback();
         }
     }, 50);
 }
 
-function startCountdown() {
+function startCountdownAndGame() {
+    let countdown = 3;
+    drawCountdown(countdown);
     const interval = setInterval(() => {
+        countdown--;
         if (countdown > 0) {
             drawCountdown(countdown);
         } else if (countdown === 0) {
             drawCountdown("GO!");
-            setTimeout(() => fadeOutGO(), 100);
-        }
-
-        countdown--;
-        if (countdown < 0) {
-            clearInterval(interval);
+            setTimeout(() => {
+                clearInterval(interval);
+                fadeOutGO(() => {
+                    game.startGame();
+                    requestAnimationFrame(gameLoop);
+                });
+            }, 500);
         }
     }, 1000);
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-    canvasLines.width = 130;
-    canvasLines.height = 110;
-    canvasLevel.width = 130;
-    canvasLevel.height = 110;
-    canvasTime.width = 280;
-    canvasTime.height = 110;
-    canvasScore.width = 280;
-    canvasScore.height = 110;
-
-    // Crear el juego desde el principio pero en pausa
-    game = new Game(
-        canvasTetris,
-        20, 10, 26, 2,
-        canvasNext,
-        canvasHold,
-        canvasLines,
-        canvasLevel,
-        canvasTime,
-        canvasScore
-    );
-
-    isPaused = true;
-    game.setPaused(true);
-    startCountdown(); // Mostrar 3, 2, 1, GO!
-});
+startCountdownAndGame();

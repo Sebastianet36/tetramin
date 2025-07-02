@@ -12,7 +12,7 @@
         <!-- Header -->
         <div class="header">
             <?php echo strtoupper(htmlspecialchars($_SESSION['nombre_usuario'])); ?>
-            <a href="Tetris-front/main_page/main_registrados.php" class="back-button">Atras</a>
+            <a href="/Tetris-front/main_page/main_registrados.php" class="back-button">Atras</a>
         </div>
 
         <!-- Main Content -->
