@@ -17,7 +17,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
 <body>
     <div class="container">
         <div class="header">
-            <div class="header-left">TETRAMIN</div>
+            <div class="header-left">estafuncando</div>
             <div class="header-right">
                 <div class="account-name">
                     <?php echo htmlspecialchars($_SESSION['nombre_usuario']); ?>
