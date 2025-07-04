@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="signup.css" />
+
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Crea tu perfil</h1>
+    </header>
+    <div class="card">
+        <form action="procesar_signup.php" name="tetrisdb" method="post">
+          <div class="input-group">
+            <label for="firstName">Nombre de usuario</label>
+            <input type="text" id="firstName" name="nombre_usuario" required />
+          </div>
+          <div class="input-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+          <div class="input-group">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" name="contraseña" required />
+          </div>        <div class="input-group">
+            <label for="search-country">País</label>
+            <div class="dropdown-wrapper">
+              <input type="text" id="search-country" placeholder="Busca un país..." autocomplete="off" required>
+              <ul id="country-list" class="dropdown-list">
+                <li>Argentina</li>
+                <li>Brasil</li>
+                <li>Chile</li>
+                <li>Colombia</li>
+                <li>España</li>
+                <li>Estados Unidos</li>
+                <li>México</li>
+                <li>Perú</li>
+                <li>Uruguay</li>
+                <li>Venezuela</li>
+              </ul>
+            </div>
+            <input type="hidden" name="ubicacion" id="ubicacion">
+          </div>  
+          <div class="actions">
+            <button type="submit" class="btn primary" name="crear">CREAR</button>
+          </div>
+        </form>
+    </div>
+  </div>
+  <footer>
+      <p>&copy; 2025 Todos los derechos reservados.</p>
+      <p>Contacto: <a href="mailto:info@misiito.com">info@misiito.com</a></p>
+      <nav class="links">
+          <ul>
+          <li><a href="/acerca-de">Acerca de</a></li>
+          <li><a href="/contacto">Contacto</a></li>
+          <li><a href="/politica-de-privacidad">Política de Privacidad</a></li>
+          </ul>
+      </nav>
+  </footer>
+  </div>
+  
+  <script>
+    const searchInput = document.getElementById('search-country');
+    const countryList = document.getElementById('country-list');
+    const hiddenInput = document.getElementById('ubicacion');
+
+    searchInput.addEventListener('input', () => {
+      const filter = searchInput.value.toLowerCase().trim();
+      const items = countryList.querySelectorAll('li');
+      
+      // Hide dropdown if input is empty
+      if (filter === '') {
+        countryList.style.display = 'none';
+        return;
+      }
+      
+      // Show dropdown and filter items
+      countryList.style.display = 'block';
+      let hasVisibleItems = false;
+      
+      items.forEach(item => {
+        const isVisible = item.textContent.toLowerCase().includes(filter);
+        item.style.display = isVisible ? 'block' : 'none';
+        if (isVisible) hasVisibleItems = true;
+      });
+      
+      // Hide dropdown if no items match
+      if (!hasVisibleItems) {
+        countryList.style.display = 'none';
+      }
+    });
+
+    searchInput.addEventListener('focus', () => {
+      const filter = searchInput.value.toLowerCase().trim();
+      if (filter !== '') {
+        countryList.style.display = 'block';
+      }
+    });
+
+    countryList.addEventListener('click', (e) => {
+      if (e.target.tagName === 'LI') {
+        searchInput.value = e.target.textContent;
+        hiddenInput.value = e.target.textContent;
+        countryList.style.display = 'none';
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!searchInput.contains(e.target) && !countryList.contains(e.target)) {
+        countryList.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
