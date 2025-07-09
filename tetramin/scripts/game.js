@@ -17,6 +17,7 @@ export class Game {
         this.score = 0;
         this.combo = -1;
         this.totalLines = 0;
+        this.totalPieces = 0;
         this.level = 1;
 
         this.startTime = Date.now();
@@ -177,7 +178,8 @@ export class Game {
                 console.warn("Invalid placement at", pos);
             }
         }
-
+        // Se coloca la pieza y por ende suma una pieza al total
+        this.totalPieces++;
 
         let isTSpin = false;
         let isMini = false;
@@ -221,6 +223,8 @@ export class Game {
         // Reiniciar lock delay
         this.lockResetsUsed = 0;
         this.lockStartTime = null;
+
+
     }
     blockedTetromino(){
         const tetrominoPositions = this.currentTetromino.currentPositions();
@@ -383,6 +387,22 @@ export class Game {
         this.startTime = Date.now();
         this.lastTime = Date.now();
         
+    }
+
+    get_score() {
+        return this.score;
+    }
+    get_level() {
+        return this.level;
+    }
+    get_totalLines() {
+        return this.totalLines;
+    }
+    get_finalTimeFormatted() {
+        return this.finalTimeFormatted;
+    }
+    get_totalPieces() {
+        return this.totalPieces;
     }
 
     keyboard() {

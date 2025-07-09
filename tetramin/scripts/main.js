@@ -19,11 +19,6 @@ canvasScore.height = 110;
 canvasNext.width = 130;
 canvasNext.height = 300;
 
-let rPressed = false;
-let rStartTime = 0;
-let rDuration = 1000;
-let rFrameId = null;
-
 const rows = 20;
 const cols = 10;
 const cellSize = 26;
@@ -53,12 +48,11 @@ function gameLoop() {
   if (!game.isGameOver) {
     game.update();
     gameLoopId = requestAnimationFrame(gameLoop);
+    console.log(game.get_totalLines(), game.totalPieces, game.score, game.level, game.finalTimeFormatted);
   } else {
     showGameOverOverlay();
   }
 }
-
-
 
 function drawCountdown(number) {
     const ctx = canvasTetris.getContext("2d");
@@ -128,14 +122,13 @@ function showGameOverOverlay() {
     goBox.style.display = "flex";
 }
 
-// 🔄 Reiniciar partida completa
 function restartGame() {
-    // 1. Cancelar animación del loop anterior si existe
+    // Cancelar animación del loop anterior si existe
     if (typeof gameLoopId !== "undefined") {
         cancelAnimationFrame(gameLoopId);
     }
 
-    // 2. Ocultar overlays (Game Over, Escape)
+    // Oculta overlays (Game Over, Escape)
     const goPopup = document.getElementById("game-over");
     if (goPopup) goPopup.style.display = "none";
 
@@ -148,14 +141,10 @@ function restartGame() {
         if (exitMessage) exitMessage.textContent = "Saliendo...";
     }
 
-    // 3. Resetear flags de reinicio
-    rPressed = false;
-    if (typeof rFrameId !== "undefined") cancelAnimationFrame(rFrameId);
-
-    // 4. Borrar instancia previa del juego
+    // Borrar instancia previa del juego
     game = null;
 
-    // 5. Crear nueva instancia limpia
+    // Crear nueva instancia limpia
     game = new Game(
         canvasTetris,
         rows,
@@ -170,20 +159,17 @@ function restartGame() {
         canvasScore
     );
 
-    // 6. Mostrar estado inicial congelado
+    // Mostrar estado inicial congelado
     game.initializeHUD();
     game.boardTetris.draw();
     game.next.draw2();
     game.hold.draw2();
 
-    // 7. Esperar cuenta regresiva antes de empezar
+    // Esperar cuenta regresiva antes de empezar
     startCountdownAndGame();
 }
 
-
-
-
-//botones
+// Botones
 document.getElementById("retry-button").addEventListener("click", () => {
     document.getElementById("game-over").style.display = "none";
     restartGame();
@@ -192,6 +178,7 @@ document.getElementById("retry-button").addEventListener("click", () => {
 document.getElementById("exit-button").addEventListener("click", () => {
     window.location.href = "/Tetris-front/main_page/main_registrados.php";
 });
+
 
 
 startCountdownAndGame();
