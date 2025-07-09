@@ -1,4 +1,4 @@
-import { Game } from "/Tetris-front/tetramin/scripts/game.js";
+import { Game } from "./game.js";
 
 const canvasTetris = document.getElementById("canvas-tetris");
 const canvasNext = document.getElementById("canvas-next");
@@ -126,7 +126,44 @@ function showGameOverOverlay() {
     document.getElementById("go-level").textContent = game.level;
     document.getElementById("go-lines").textContent = game.totalLines;
     goBox.style.display = "flex";
+    
+    // Enviar datos al servidor
+    enviarDatosAlServidor();
 }
+
+//---------------------------------------------------------------
+function enviarDatosAlServidor() {
+    // Crear un formulario temporal para enviar los datos
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '../../backend/guardar_datos_juego.php';
+    
+    // Agregar los campos con los datos del juego
+    const campos = [
+        { name: 'puntaje', value: game.score },
+        { name: 'tiempo', value: game.finalTimeFormatted || '00:00:00' },
+        { name: 'nivel', value: game.level },
+        { name: 'lineas', value: game.totalLines }
+    ];
+    
+    campos.forEach(campo => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = campo.name;
+        input.value = campo.value;
+        form.appendChild(input);
+    });
+    
+    // Agregar el formulario al DOM y enviarlo
+    document.body.appendChild(form);
+    form.submit();
+    
+    // Remover el formulario después de enviarlo
+    setTimeout(() => {
+        document.body.removeChild(form);
+    }, 1000);
+}
+//---------------------------------------------------------------
 
 // 🔄 Reiniciar partida completa
 function restartGame() {
@@ -190,7 +227,7 @@ document.getElementById("retry-button").addEventListener("click", () => {
 });
 
 document.getElementById("exit-button").addEventListener("click", () => {
-    window.location.href = "/Tetris-front/main_page/main_registrados.php";
+    window.location.href = "../main_page/main_registrados.php";
 });
 
 
