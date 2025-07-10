@@ -1,46 +1,62 @@
 <?php
-// Establecer headers para JSON
+// Archivo de debug para guardar_datos_juego.php
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST');
-header('Access-Control-Allow-Headers: Content-Type');
 
+// Log de debug
+$debug_log = [];
+
+// Capturar todos los datos de entrada
+$debug_log['timestamp'] = date('Y-m-d H:i:s');
+$debug_log['method'] = $_SERVER['REQUEST_METHOD'];
+$debug_log['post_data'] = $_POST;
+$debug_log['session_data'] = isset($_SESSION) ? $_SESSION : 'No session';
+
+// Verificar sesión
 session_start();
-include_once 'conn.php';
+$debug_log['session_after_start'] = $_SESSION;
 
-// Habilitar reporte de errores para debugging
-ini_set('display_errors', 0); // Cambiado a 0 para evitar output HTML en JSON
-ini_set('display_startup_errors', 0);
-error_reporting(E_ALL);
+// Verificar conexión a base de datos
+include_once 'conn.php';
+$debug_log['db_connection'] = $conn->connect_error ? 'Error: ' . $conn->connect_error : 'OK';
 
 // Verificar si el usuario está autenticado
 if (!isset($_SESSION['nombre_usuario'])) {
+    $debug_log['auth_status'] = 'Usuario no autenticado';
     http_response_code(401);
-    echo json_encode(['error' => 'Usuario no autenticado']);
+    echo json_encode([
+        'error' => 'Usuario no autenticado',
+        'debug' => $debug_log
+    ]);
     exit();
 }
 
-// Verificar si es una petición POST
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['error' => 'Método no permitido']);
-    exit();
-}
+$debug_log['auth_status'] = 'Usuario autenticado: ' . $_SESSION['nombre_usuario'];
 
-// Obtener y validar los datos del formulario
+// Verificar datos POST
 $puntaje = isset($_POST['puntaje']) ? (int)$_POST['puntaje'] : 0;
 $tiempo = isset($_POST['tiempo']) ? $_POST['tiempo'] : '00:00:00';
 $nivel = isset($_POST['nivel']) ? (int)$_POST['nivel'] : 1;
 $lineas = isset($_POST['lineas']) ? (int)$_POST['lineas'] : 0;
 
-// Obtener el id_usuario desde la base de datos usando el nombre_usuario
+$debug_log['processed_data'] = [
+    'puntaje' => $puntaje,
+    'tiempo' => $tiempo,
+    'nivel' => $nivel,
+    'lineas' => $lineas
+];
+
+// Buscar usuario
 $nombre_usuario = $_SESSION['nombre_usuario'];
 $sql_usuario = "SELECT id_usuario FROM usuarios WHERE nombre_usuario = ?";
 $stmt_usuario = $conn->prepare($sql_usuario);
 
 if (!$stmt_usuario) {
+    $debug_log['user_query_error'] = 'Error en preparación: ' . $conn->error;
     http_response_code(500);
-    echo json_encode(['error' => 'Error en la preparación de la consulta de usuario']);
+    echo json_encode([
+        'error' => 'Error en la preparación de la consulta de usuario',
+        'debug' => $debug_log
+    ]);
     exit();
 }
 
@@ -49,29 +65,36 @@ $stmt_usuario->execute();
 $result_usuario = $stmt_usuario->get_result();
 
 if ($result_usuario->num_rows === 0) {
+    $debug_log['user_not_found'] = 'Usuario no encontrado: ' . $nombre_usuario;
     http_response_code(404);
-    echo json_encode(['error' => 'Usuario no encontrado en la base de datos']);
+    echo json_encode([
+        'error' => 'Usuario no encontrado en la base de datos',
+        'debug' => $debug_log
+    ]);
     exit();
 }
 
 $row_usuario = $result_usuario->fetch_assoc();
 $id_usuario = $row_usuario['id_usuario'];
+$debug_log['user_id'] = $id_usuario;
 
-// Convertir el tiempo de formato MM:SS:ms a segundos
+// Convertir tiempo
 $duracion_segundos = 0;
 if (preg_match('/^(\d{1,2}):(\d{1,2}):(\d{1,2})$/', $tiempo, $matches)) {
-    // Formato MM:SS:ms
     $duracion_segundos = (int)$matches[1] * 60 + (int)$matches[2] + (int)$matches[3] / 100;
 } elseif (preg_match('/^(\d{1,2}):(\d{1,2})$/', $tiempo, $matches)) {
-    // Formato MM:SS
     $duracion_segundos = (int)$matches[1] * 60 + (int)$matches[2];
 } else {
-    // Si no coincide con ningún formato, intentar convertir directamente
     $duracion_segundos = (int)$tiempo;
 }
 
+$debug_log['time_conversion'] = [
+    'original' => $tiempo,
+    'seconds' => $duracion_segundos
+];
+
+// Intentar inserción
 try {
-    // Insertar el record en la tabla record
     $sql = "INSERT INTO record (id_usuario, fecha_jugada, puntaje, duracion, nivel, lineas, id_modo) 
             VALUES (?, NOW(), ?, ?, ?, ?, 1)";
     
@@ -84,6 +107,9 @@ try {
     $stmt->bind_param("iiiii", $id_usuario, $puntaje, $duracion_segundos, $nivel, $lineas);
     
     if ($stmt->execute()) {
+        $debug_log['insert_success'] = true;
+        $debug_log['inserted_id'] = $conn->insert_id;
+        
         $response = [
             'success' => true,
             'message' => 'Datos guardados correctamente',
@@ -92,8 +118,10 @@ try {
                 'tiempo' => $tiempo,
                 'nivel' => $nivel,
                 'lineas' => $lineas,
-                'duracion_segundos' => $duracion_segundos
-            ]
+                'duracion_segundos' => $duracion_segundos,
+                'record_id' => $conn->insert_id
+            ],
+            'debug' => $debug_log
         ];
         echo json_encode($response);
     } else {
@@ -101,6 +129,7 @@ try {
     }
     
 } catch (Exception $e) {
+    $debug_log['exception'] = $e->getMessage();
     http_response_code(500);
     $response = [
         'error' => 'Error interno del servidor',
@@ -112,7 +141,8 @@ try {
             'lineas' => $lineas,
             'duracion_segundos' => $duracion_segundos,
             'id_usuario' => $id_usuario
-        ]
+        ],
+        'debug' => $debug_log
     ];
     echo json_encode($response);
 }

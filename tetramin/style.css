@@ -235,3 +235,19 @@ body::after {
   color: #000;
   text-shadow: none;
 }
+
+.mensaje-notificacion {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+.mensaje-notificacion.success { background-color: #4CAF50; }
+.mensaje-notificacion.error { background-color: #f44336; }

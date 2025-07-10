@@ -1,4 +1,5 @@
 import { Game } from "./game.js";
+import { enviarDatosAlServidor } from './apiUtils.js';
 
 const canvasTetris = document.getElementById("canvas-tetris");
 const canvasNext = document.getElementById("canvas-next");
@@ -121,43 +122,14 @@ function showGameOverOverlay() {
     document.getElementById("go-lines").textContent = game.totalLines;
     goBox.style.display = "flex";
     
-    // Enviar datos al servidor
-    enviarDatosAlServidor();
+    // Enviar datos al servidor usando la función utilitaria
+    enviarDatosAlServidor({
+        puntaje: game.score,
+        tiempo: game.finalTimeFormatted || '00:00:00',
+        nivel: game.level,
+        lineas: game.totalLines
+    }, '/Tetris-front/backend/guardar_datos_juego.php');
 }
-
-//---------------------------------------------------------------
-function enviarDatosAlServidor() {
-    // Crear un formulario temporal para enviar los datos
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '../../backend/guardar_datos_juego.php';
-    
-    // Agregar los campos con los datos del juego
-    const campos = [
-        { name: 'puntaje', value: game.score },
-        { name: 'tiempo', value: game.finalTimeFormatted || '00:00:00' },
-        { name: 'nivel', value: game.level },
-        { name: 'lineas', value: game.totalLines }
-    ];
-    
-    campos.forEach(campo => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = campo.name;
-        input.value = campo.value;
-        form.appendChild(input);
-    });
-    
-    // Agregar el formulario al DOM y enviarlo
-    document.body.appendChild(form);
-    form.submit();
-    
-    // Remover el formulario después de enviarlo
-    setTimeout(() => {
-        document.body.removeChild(form);
-    }, 1000);
-}
-//---------------------------------------------------------------
 
 // 🔄 Reiniciar partida completa
 
