@@ -32,6 +32,7 @@ $puntaje = isset($_POST['puntaje']) ? (int)$_POST['puntaje'] : 0;
 $tiempo = isset($_POST['tiempo']) ? $_POST['tiempo'] : '00:00:00';
 $nivel = isset($_POST['nivel']) ? (int)$_POST['nivel'] : 1;
 $lineas = isset($_POST['lineas']) ? (int)$_POST['lineas'] : 0;
+$id_modo = isset($_POST['id_modo']) ? (int)$_POST['id_modo'] : 1; // Por defecto modo 1
 
 // Obtener el id_usuario desde la base de datos usando el nombre_usuario
 $nombre_usuario = $_SESSION['nombre_usuario'];
@@ -71,54 +72,55 @@ if (preg_match('/^(\d{1,2}):(\d{1,2}):(\d{1,2})$/', $tiempo, $matches)) {
 }
 
 try {
-    // Insertar el record en la tabla record
-    $sql = "INSERT INTO record (id_usuario, fecha_jugada, puntaje, duracion, nivel, lineas, id_modo) 
-            VALUES (?, NOW(), ?, ?, ?, ?, 1)";
-    
-    $stmt = $conn->prepare($sql);
-    
-    if (!$stmt) {
-        throw new Exception("Error en la preparación de la consulta: " . $conn->error);
-    }
-    
-    $stmt->bind_param("iiiii", $id_usuario, $puntaje, $duracion_segundos, $nivel, $lineas);
-    
-    if ($stmt->execute()) {
-        $response = [
+    // Llamar al procedimiento almacenado GuardarRecord
+    $stmt = $conn->prepare("CALL GuardarRecord(?, ?, ?, ?, ?, ?, @es_nuevo_record)");
+    $stmt->bind_param("iiiiii", $id_usuario, $puntaje, $duracion_segundos, $nivel, $lineas, $id_modo);
+    $stmt->execute();
+    $stmt->close();
+
+    // Obtener el valor de salida
+    $result = $conn->query("SELECT @es_nuevo_record AS es_nuevo_record");
+    $row = $result->fetch_assoc();
+    $es_nuevo_record = $row['es_nuevo_record'];
+
+    if ($es_nuevo_record) {
+        echo json_encode([
             'success' => true,
-            'message' => 'Datos guardados correctamente',
+            'nuevo_record' => true,
+            'message' => '¡Nuevo récord guardado!',
             'data' => [
                 'puntaje' => $puntaje,
                 'tiempo' => $tiempo,
                 'nivel' => $nivel,
                 'lineas' => $lineas,
-                'duracion_segundos' => $duracion_segundos
+                'duracion_segundos' => $duracion_segundos,
+                'id_modo' => $id_modo
             ]
-        ];
-        echo json_encode($response);
+        ]);
     } else {
-        throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+        echo json_encode([
+            'success' => true,
+            'nuevo_record' => false,
+            'message' => 'No se superó el récord anterior.',
+            'data' => [
+                'puntaje' => $puntaje,
+                'tiempo' => $tiempo,
+                'nivel' => $nivel,
+                'lineas' => $lineas,
+                'duracion_segundos' => $duracion_segundos,
+                'id_modo' => $id_modo
+            ]
+        ]);
     }
-    
 } catch (Exception $e) {
     http_response_code(500);
-    $response = [
+    echo json_encode([
         'error' => 'Error interno del servidor',
-        'message' => $e->getMessage(),
-        'debug_info' => [
-            'puntaje' => $puntaje,
-            'tiempo' => $tiempo,
-            'nivel' => $nivel,
-            'lineas' => $lineas,
-            'duracion_segundos' => $duracion_segundos,
-            'id_usuario' => $id_usuario
-        ]
-    ];
-    echo json_encode($response);
+        'message' => $e->getMessage()
+    ]);
 }
 
 // Cerrar las conexiones
-if (isset($stmt)) $stmt->close();
 if (isset($stmt_usuario)) $stmt_usuario->close();
 if (isset($conn)) $conn->close();
 ?> 
