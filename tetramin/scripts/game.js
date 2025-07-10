@@ -389,22 +389,6 @@ export class Game {
         
     }
 
-    get_score() {
-        return this.score;
-    }
-    get_level() {
-        return this.level;
-    }
-    get_totalLines() {
-        return this.totalLines;
-    }
-    get_finalTimeFormatted() {
-        return this.finalTimeFormatted;
-    }
-    get_totalPieces() {
-        return this.totalPieces;
-    }
-
     keyboard() {
         // Guardar referencia
         this.keyDownHandler = (evt) => {

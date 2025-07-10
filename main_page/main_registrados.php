@@ -1,7 +1,8 @@
 <?php
+include_once __DIR__ . '/../backend/conn.php';
 session_start();
 if (!isset($_SESSION['nombre_usuario'])) {
-    header("Location: /Tetris-front/signin_page/signin.html");
+    header("Location: ../signin_page/signin.html");
     exit();
 }
 ?>
@@ -23,14 +24,14 @@ if (!isset($_SESSION['nombre_usuario'])) {
                 <div class="account-name">
                     <?php echo htmlspecialchars($_SESSION['nombre_usuario']); ?>
                 </div>
-                <a href="/Tetris-front/perfil_page/perfil.php" style="text-decoration: none;">
+                <a href="../perfil_page/perfil.php" style="text-decoration: none;">
                     <div class="profile">Perfil</div>
                 </a>
             </div>
         </div>
         
         <div class="main-content">
-            <a href="/Tetris-front/leaderboard_page/leaderboard.html">
+            <a href="../backend/leaderboard.php">
                 <button class="sidebar">
                     <h3>Top 10 globalest</h3>
                 </button>
@@ -38,7 +39,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
             
             <div class="content">
                 <div class="modes-grid">
-                    <a href="/Tetris-front/tetramin/index.html" class="mode-link">
+                    <a href="../tetramin/index.html" class="mode-link">
                         <button class="mode mode-grid-item">
                             <div class="mode-content">
                                 <div class="mode-title">Clásico</div>
@@ -69,7 +70,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                 </div>
                 
                 <div class="config-section">
-                    <a href="/Tetris-front/g.config_page/config.html" class="config-link">
+                    <a href="../g.confi_page/config.html" class="config-link">
                         <button class="mode mode-config">
                             <div class="config-content">
                                 <div class="config-title">Configuraciones</div>

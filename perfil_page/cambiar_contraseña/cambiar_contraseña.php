@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['id_usuario'])) {
-  header("Location: login.php");
+  header("Location: ../../signin_page/signin.html");
   exit();
 }
 ?>
@@ -13,7 +13,7 @@ if (!isset($_SESSION['id_usuario'])) {
 </head>
 <body>
   <h2>Cambiar contraseña</h2>
-  <form method="POST" action="procesar_cambio_contraseña.php">
+  <form method="POST" action="../../backend/procesar_cambio_contraseña.php">
     <label>Contraseña actual:</label><br>
     <input type="password" name="contraseña_actual" required><br><br>
 

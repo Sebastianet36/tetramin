@@ -1,4 +1,5 @@
-import { Game } from "/Tetris-front/tetramin/scripts/game.js";
+import { Game } from "./game.js";
+import { enviarDatosAlServidor } from '../../backend/datos_partida.js';
 
 const canvasTetris = document.getElementById("canvas-tetris");
 const canvasNext = document.getElementById("canvas-next");
@@ -48,7 +49,7 @@ function gameLoop() {
   if (!game.isGameOver) {
     game.update();
     gameLoopId = requestAnimationFrame(gameLoop);
-    console.log(game.get_totalLines(), game.totalPieces, game.score, game.level, game.finalTimeFormatted);
+    console.log(game.totalLines, game.totalPieces, game.score, game.level, game.finalTimeFormatted);
   } else {
     showGameOverOverlay();
   }
@@ -120,6 +121,15 @@ function showGameOverOverlay() {
     document.getElementById("go-level").textContent = game.level;
     document.getElementById("go-lines").textContent = game.totalLines;
     goBox.style.display = "flex";
+
+        // Enviar datos al servidor usando la función utilitaria
+        enviarDatosAlServidor({
+            puntaje: game.score,
+            tiempo: game.finalTimeFormatted || '00:00:00',
+            nivel: game.level,
+            lineas: game.totalLines
+        }, '/Tetris-front/backend/guardar_datos_juego.php');
+    
 }
 
 function restartGame() {
@@ -178,7 +188,5 @@ document.getElementById("retry-button").addEventListener("click", () => {
 document.getElementById("exit-button").addEventListener("click", () => {
     window.location.href = "/Tetris-front/main_page/main_registrados.php";
 });
-
-
 
 startCountdownAndGame();

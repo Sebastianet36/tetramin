@@ -1,4 +1,5 @@
 <?php
+include_once __DIR__ . '/../backend/conn.php';
 session_start();
 $nombre_usuario = isset($_SESSION['nombre_usuario']) ? $_SESSION['nombre_usuario'] : 'Invitado';
 ?>
@@ -18,7 +19,7 @@ $nombre_usuario = isset($_SESSION['nombre_usuario']) ? $_SESSION['nombre_usuario
         <!-- Header -->
         <div class="header">
             <?php echo htmlspecialchars($nombre_usuario); ?>
-            <a href="/Tetris-front/main_page/main_registrados.php" class="back-button">Atras</a>
+            <a href="../main_page/main_registrados.php" class="back-button">Atras</a>
         </div>
 
         <!-- Main Content -->
