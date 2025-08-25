@@ -31,7 +31,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
         </div>
         
         <div class="main-content">
-            <a href="../backend/leaderboard.php">
+            <a href="../leaderboard_page/leaderboard.php">
                 <button class="sidebar">
                     <h3>Top 10 globalest</h3>
                 </button>
@@ -95,6 +95,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
     </div>
 </body>
 </html>
+
 
 
 
