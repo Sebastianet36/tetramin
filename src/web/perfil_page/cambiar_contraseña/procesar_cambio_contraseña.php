@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-$conexion = new mysqli("localhost", "root", "", "tetrisdb");
+$conexion = new mysqli("localhost", "root", "", "tetramindb");
 if ($conexion->connect_error) {
     die("Error de conexión: " . $conexion->connect_error);
 }

@@ -3,7 +3,7 @@
 $servername = "localhost"; // Reemplaza con tu host de base de datos
 $username = "root"; // Reemplaza con tu nombre de usuario de la base de datos
 $password = ""; // Reemplaza con tu contraseña de la base de datos
-$dbname = "tetrisdb"; // Tu nombre de la base de datos
+$dbname = "tetramindb"; // Tu nombre de la base de datos
 
 // Crear conexión
 $conn = new mysqli($servername, $username, $password, $dbname);
