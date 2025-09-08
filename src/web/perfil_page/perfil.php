@@ -44,7 +44,7 @@ $nombre_usuario = isset($_SESSION['nombre_usuario']) ? $_SESSION['nombre_usuario
                         <span class="stat-value">42</span>
                     </div>
                     <div class="stat-item">
-                        <a href="/Tetris-front/perfil_page/cambiar_contraseña/cambiar_contraseña.php">Cambiar contraseña</a>
+                        <a href="./cambiar_contraseña\cambiar_contraseña.php">Cambiar contraseña</a>
                     </div>
                 </div>
             </div>

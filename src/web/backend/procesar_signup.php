@@ -20,7 +20,7 @@ if (isset($_POST['crear'])) {
     $stmt->bind_param("sssss", $nombre, $email, $passHash, $fecha, $ubicacion);
 
     if ($stmt->execute()) {
-        header("Location: /Tetris-front/signin_page/signin.html");
+        header("Location: ../signin_page/signin.html");
         exit();
     } else {
         echo "Error al registrar el usuario: " . $stmt->error;

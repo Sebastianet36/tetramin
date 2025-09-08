@@ -39,31 +39,31 @@ if (!isset($_SESSION['nombre_usuario'])) {
             
             <div class="content">
                 <div class="modes-grid">
-                    <a href="../tetramin/index.html" class="mode-link">
+                    <a href="../games/index.html?mode=classic" class="mode-link">
                         <button class="mode mode-grid-item">
                             <div class="mode-content">
                                 <div class="mode-title">Clásico</div>
                             </div>
                         </button>
                     </a>
-                    <a href="#" class="mode-link">
+                    <a href="../games/index.html?mode=sprint40" class="mode-link">
                         <button class="mode mode-grid-item">
                             <div class="mode-content">
                                 <div class="mode-title">Carrera</div>
                             </div>
                         </button>
                     </a>
-                    <a href="#" class="mode-link">
+                    <a href="../games/index.html?mode=cheese" class="mode-link">
                         <button class="mode mode-grid-item">
                             <div class="mode-content">
-                                <div class="mode-title">Excavar</div>
+                                <div class="mode-title">Cheese!</div>
                             </div>
                         </button>
                     </a>
-                    <a href="#" class="mode-link">
+                    <a href="../games/index.html?mode=survival" class="mode-link">
                         <button class="mode mode-grid-item">
                             <div class="mode-content">
-                                <div class="mode-title">Chill-Out</div>
+                                <div class="mode-title">Supervivencia</div>
                             </div>
                         </button>
                     </a>

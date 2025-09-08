@@ -1,4 +1,4 @@
-import { Tetromino } from "/Tetris-front/tetramin/scripts/tetromino.js";
+import { Tetromino } from "./tetromino.js";
 export class Grid{
     constructor(canvas, rows, cols, cellSize, space) {
         this.canvas = canvas;
@@ -24,7 +24,7 @@ export class Grid{
             }
         }
     }
-    drawSquere(x,y,side,color,bordercolor, border){
+    drawSquare(x,y,side,color,bordercolor, border){
         const borderSize = side / border;
         this.ctx.fillStyle = color;
         this.ctx.fillRect(x, y, side, side);
@@ -42,7 +42,7 @@ export class Grid{
                 if(this.matriz[r][c] !== 0){
                     this.block.drawBlock(position.x, position.y, this.matriz[r][c])
                 } else {
-                    this.drawSquere(position.x, position.y, this.cellSize, "#000", "#303030", 8);
+                    this.drawSquare(position.x, position.y, this.cellSize, "#000", "#303030", 8);
                 }
             }
         }

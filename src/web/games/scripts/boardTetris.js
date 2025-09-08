@@ -1,4 +1,4 @@
-import { Grid } from "/Tetris-front/tetramin/scripts/grid.js";
+import { Grid } from "./grid.js";
 
 export class BoardTetris extends Grid {
     constructor(canvas, rows, cols, cellSize, space) {

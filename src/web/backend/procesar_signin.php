@@ -20,7 +20,7 @@ if ($resultado->num_rows === 1) {
 
     if (password_verify($contraseña, $hash_almacenado)) {
         $_SESSION['nombre_usuario'] = $fila['nombre_usuario'];
-        header("Location: /Tetris-front/main_page/main_registrados.php");
+        header("Location: ../main_page/main_registrados.php");
         exit();
     } else {
         echo "Contraseña incorrecta.";

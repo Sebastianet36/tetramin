@@ -1,130 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TETRAMIN</title>
-    <link rel="stylesheet" href="/Tetris-front/tetramin/style.css">
-    <link rel="icon" type="image/x-icon" href="/Tetris-front/tetramin/Tetramico.ico">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TETRAMIN</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="icon" type="image/x-icon" href="../../resources/Tetramico.ico">
 </head>
 
 <script>
-    let escapePressed = false;
-    let escapeStartTime = 0;
-    let escapeDuration = 1000; // milisegundos para activar la salida
-    let animationFrameId;
-    let exitWarning, exitBar;
+(function() {
+  const exitDuration = 1000; // ms necesarios para confirmar la salida
+  let exitTimeout = null;
+  let exitWarning, exitBar;
 
-    window.addEventListener("DOMContentLoaded", () => {
-        exitWarning = document.getElementById('exit-warning');
-        exitBar = document.querySelector('.exit-bar');
+  window.addEventListener("DOMContentLoaded", () => {
+    exitWarning = document.getElementById('exit-warning');
+    exitBar = document.querySelector('.exit-bar');
 
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && !escapePressed) {
-                escapePressed = true;
-                escapeStartTime = performance.now();
-                exitBar.style.width = '0%';
-                exitWarning.style.display = 'flex';
+    // Asegurarnos estado inicial
+    exitBar.style.width = '0%';
+    exitBar.style.transition = `width ${exitDuration}ms linear`;
 
-                animateProgress();
-            }
-        });
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
 
-        document.addEventListener('keyup', function (e) {
-            if (e.key === 'Escape') {
-                escapePressed = false;
-                cancelAnimationFrame(animationFrameId);
-                exitBar.style.width = '0%';
-                exitWarning.style.display = 'none';
-            }
-        });
+      // Si ya está corriendo la cuenta, ignoramos repetidos
+      if (exitTimeout) return;
 
-        function animateProgress() {
-            const now = performance.now();
-            const elapsed = now - escapeStartTime;
-            const progress = Math.min(elapsed / escapeDuration, 1);
+      // Mostrar overlay y arrancar la animación CSS
+      exitWarning.style.display = 'flex';
 
-            exitBar.style.width = `${progress * 300}%`;
+      // Forzar reflow para asegurar que la transición se aplique correctamente
+      void exitBar.offsetWidth;
 
-            if (progress < 1 && escapePressed) {
-                animationFrameId = requestAnimationFrame(animateProgress);
-            } else if (progress >= 1) {
-                window.location.href = '/Tetris-front/main_page/main_registrados.php';
-            }
-        }
+      // Animar la barra al 100% en exitDuration ms
+      exitBar.style.transition = `width ${exitDuration}ms linear`;
+      exitBar.style.width = '100%';
+
+      // Programar la redirección final (usamos replace)
+      exitTimeout = setTimeout(() => {
+        // Cambia aquí la URL si tu ruta real es relativa (../main_page/...) o absoluta
+        window.location.replace('../main_page/main_registrados.php');
+      }, exitDuration);
     });
+
+    document.addEventListener('keyup', (e) => {
+      if (e.key !== 'Escape') return;
+
+      // Si hubo timeout, lo cancelamos (abandono de la salida)
+      if (exitTimeout) {
+        clearTimeout(exitTimeout);
+        exitTimeout = null;
+      }
+
+      // Animamos la barra de vuelta a 0 en 200ms para feedback
+      exitBar.style.transition = 'width 200ms linear';
+      exitBar.style.width = '0%';
+
+      // Ocultamos overlay ligeramente después de la contracción
+      setTimeout(() => {
+        exitWarning.style.display = 'none';
+      }, 220);
+    });
+  });
+})();
 </script>
 
 <body>
-<a id="escape-button" style="display: none;">Volver</a>
-    <div class="main-layout">
-        <!-- Columna Izquierda -->
-        <div class="sidebar">
-            <div class="sidebar-top">
-                <div class="canvas-container">
-                    <span>Hold</span>
-                    <canvas id="canvas-hold"></canvas>
-                </div>
-            </div>
-            <div class="sidebar-bottom">
-                <div class="canvas-container">
-                    <span>Lineas</span>
-                    <canvas id="canvas-lines"></canvas>
-                </div>
-                <div class="canvas-container">
-                    <span>Nivel</span>
-                    <canvas id="canvas-level"></canvas>
-                </div>
-                <div class="canvas-container">
-                    <span>Tiempo</span>
-                    <canvas id="canvas-time"></canvas>
-                </div>
-            </div>
+  <!-- Layout principal -->
+  <div class="main-layout">
+    <!-- Columna izquierda -->
+    <div class="sidebar">
+      <div class="sidebar-top">
+        <div class="canvas-container">
+          <span>Hold</span>
+          <canvas id="canvas-hold"></canvas>
         </div>
-
-        <!-- Centro: Tetris -->
-        <div class="center">
-            <div class="canvas-container">
-                <canvas id="canvas-tetris"></canvas>
-            </div>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="canvas-container">
+          <span>Líneas</span>
+          <canvas id="canvas-lines"></canvas>
         </div>
-
-        <!-- Columna Derecha -->
-        <div class="sidebar">
-            <div class="canvas-container">
-                <span>Next</span>
-                <canvas id="canvas-next"></canvas>
-            </div>
-            <div class="canvas-container">
-                <span id="score-container">Puntaje</span>
-                <canvas id="canvas-score"></canvas>
-            </div>
+        <div class="canvas-container">
+          <span>Nivel</span>
+          <canvas id="canvas-level"></canvas>
         </div>
+        <div class="canvas-container">
+          <span>Tiempo</span>
+          <canvas id="canvas-time"></canvas>
+        </div>
+      </div>
     </div>
 
-    <script src="/Tetris-front/tetramin/scripts/main.js" type="module"></script>
-    
-    <div id="exit-warning" style="display: none;">
-        <div class="exit-box">
-            <p>Saliendo...</p>
-            <div class="exit-progress">
-                <div class="exit-bar"></div>
-            </div>
-        </div>
+    <!-- Centro: tablero de Tetris -->
+    <div class="center">
+      <div class="canvas-container">
+        <canvas id="canvas-tetris"></canvas>
+      </div>
     </div>
 
-    <div id="game-over" class="overlay-popup" style="display: none;">
-        <div class="overlay-box">
-            <h2>¡Perdiste!</h2>
-            <p><strong>Puntaje:</strong> <span id="go-score">0</span></p>
-            <p><strong>Tiempo:</strong> <span id="go-time">00:00:00</span></p>
-            <p><strong>Nivel:</strong> <span id="go-level">1</span></p>
-            <p><strong>Líneas:</strong> <span id="go-lines">0</span></p>
-            <div class="overlay-buttons">
-            <button id="retry-button">Reintentar</button>
-            <button id="exit-button">Salir</button>
-            </div>
-        </div>
+    <!-- Columna derecha -->
+    <div class="sidebar">
+      <div class="canvas-container">
+        <span>Next</span>
+        <canvas id="canvas-next"></canvas>
+      </div>
+      <div class="canvas-container">
+        <span id="score-container">Puntaje</span>
+        <canvas id="canvas-score"></canvas>
+      </div>
     </div>
+  </div>
+
+  <!-- Overlay para salir con Escape -->
+  <div id="exit-warning" style="display:none;">
+    <div class="exit-box">
+      <p>Saliendo...</p>
+      <div class="exit-progress">
+        <div class="exit-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay de Game Over -->
+  <div id="game-over" class="overlay-popup" style="display:none;">
+    <div class="overlay-box">
+      <h2>¡Perdiste!</h2>
+      <p><strong>Puntaje:</strong> <span id="go-score">0</span></p>
+      <p><strong>Tiempo:</strong> <span id="go-time">00:00:00</span></p>
+      <p><strong>Nivel:</strong> <span id="go-level">1</span></p>
+      <p><strong>Líneas:</strong> <span id="go-lines">0</span></p>
+      <div class="overlay-buttons">
+        <button id="retry-button">Reintentar</button>
+        <button id="exit-button">Salir</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./scripts/main.js" type="module"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['id_usuario'])) {
-  header("Location: ../../signin_page/signin.html");
+  header("Location: ../../signin_page\signin.html");
   exit();
 }
 ?>

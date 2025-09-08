@@ -18,7 +18,7 @@ class Tetromino {
         this.lastMoveWasRotation = false;
 
     }
-    drawSquere(x, y, sidze, color) {
+    drawSquare(x, y, sidze, color) {
         this.ctx.fillStyle = color;
         this.ctx.fillRect(x, y, sidze, sidze);
     }
@@ -88,7 +88,7 @@ class Tetromino {
             palette.rightTriangle
         );
 
-        this.drawSquere(
+        this.drawSquare(
             x+margin,
             y+margin,
             this.cellsize-(margin*2),

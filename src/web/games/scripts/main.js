@@ -1,6 +1,27 @@
 import { Game } from "./game.js";
-import { enviarDatosAlServidor } from '../../backend/datos_partida.js';
+import { enviarDatosAlServidor } from "../../backend/datos_partida.js";
 
+// ----------------- PARAMETROS Y MODOS -----------------
+const urlParams = new URLSearchParams(window.location.search);
+const selectedMode = urlParams.get("mode") || "classic";
+let currentMode = null;
+
+async function loadMode() {
+  if (selectedMode !== "classic") {
+    try {
+      // subir un nivel porque modes/ no está dentro de scripts/
+      currentMode = await import(`../modes/${selectedMode}.js`).then(m => m.default);
+      console.log(`Modo cargado: ${currentMode.name}`);
+    } catch (err) {
+      console.error("Error cargando el modo:", err);
+    }
+  } else {
+    console.log("Modo clásico seleccionado");
+  }
+}
+
+
+// ----------------- CANVAS -----------------
 const canvasTetris = document.getElementById("canvas-tetris");
 const canvasNext = document.getElementById("canvas-next");
 const canvasHold = document.getElementById("canvas-hold");
@@ -25,7 +46,13 @@ const cols = 10;
 const cellSize = 26;
 const space = 2;
 
-let game = new Game(
+// ----------------- VARIABLES GLOBALES -----------------
+let game;
+let gameLoopId;
+
+// ----------------- FUNCIONES PRINCIPALES -----------------
+function initGame() {
+  game = new Game(
     canvasTetris,
     rows,
     cols,
@@ -37,156 +64,128 @@ let game = new Game(
     canvasLevel,
     canvasTime,
     canvasScore
-);
+  );
+  game.initializeHUD();
+  game.boardTetris.draw();
+  game.next.draw2();
+  game.hold.draw2();
+}
 
-game.initializeHUD();
-game.boardTetris.draw();
-game.next.draw2();
-game.hold.draw2();
-
-let gameLoopId;
 function gameLoop() {
   if (!game.isGameOver) {
     game.update();
+    if (currentMode && currentMode.update) {
+      currentMode.update(game);
+    }
     gameLoopId = requestAnimationFrame(gameLoop);
-    console.log(game.totalLines, game.totalPieces, game.score, game.level, game.finalTimeFormatted);
   } else {
+    if (currentMode && currentMode.onGameOver) {
+      currentMode.onGameOver(game);
+    }
     showGameOverOverlay();
   }
 }
 
-function drawCountdown(number) {
-    const ctx = canvasTetris.getContext("2d");
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    ctx.save();
-    ctx.font = "80px 'Orbitron', sans-serif";
-    ctx.fillStyle = "#00ffff";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.shadowColor = "#00ffff";
-    ctx.shadowBlur = 10;
-    ctx.fillText(number, canvasTetris.width / 2, canvasTetris.height / 2);
-    ctx.restore();
-}
-
-function fadeOutGO(callback) {
-    const ctx = canvasTetris.getContext("2d");
-    let opacity = 1;
-    const fadeInterval = setInterval(() => {
-        ctx.clearRect(0, 0, canvasTetris.width, canvasTetris.height);
-        ctx.save();
-        ctx.globalAlpha = opacity;
-        ctx.font = "80px 'Orbitron', sans-serif";
-        ctx.fillStyle = "#00ffff";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.shadowColor = "#00ffff";
-        ctx.shadowBlur = 10;
-        ctx.fillText("GO!", canvasTetris.width / 2, canvasTetris.height / 2);
-        ctx.restore();
-
-        opacity -= 0.1;
-        if (opacity <= 0) {
-            clearInterval(fadeInterval);
-            ctx.clearRect(0, 0, canvasTetris.width, canvasTetris.height);
-            callback();
-        }
-    }, 50);
-}
-
 function startCountdownAndGame() {
-    let countdown = 3;
-    drawCountdown(countdown);
-    const interval = setInterval(() => {
-        countdown--;
-        if (countdown > 0) {
-            drawCountdown(countdown);
-        } else if (countdown === 0) {
-            drawCountdown("GO!");
-            setTimeout(() => {
-                clearInterval(interval);
-                fadeOutGO(() => {
-                    game.startGame();
-                    requestAnimationFrame(gameLoop);
-                });
-            }, 500);
-        }
-    }, 1000);
-}
-
-function showGameOverOverlay() {
-    const goBox = document.getElementById("game-over");
-    document.getElementById("go-score").textContent = game.score;
-    document.getElementById("go-time").textContent = game.finalTimeFormatted || "00:00:00";
-    document.getElementById("go-level").textContent = game.level;
-    document.getElementById("go-lines").textContent = game.totalLines;
-    goBox.style.display = "flex";
-
-        // Enviar datos al servidor usando la función utilitaria
-        enviarDatosAlServidor({
-            puntaje: game.score,
-            tiempo: game.finalTimeFormatted || '00:00:00',
-            nivel: game.level,
-            lineas: game.totalLines
-        }, '/Tetris-front/backend/guardar_datos_juego.php');
-    
+  let countdown = 3;
+  drawCountdown(countdown);
+  const interval = setInterval(() => {
+    countdown--;
+    if (countdown > 0) {
+      drawCountdown(countdown);
+    } else if (countdown === 0) {
+      drawCountdown("GO!");
+      setTimeout(() => {
+        clearInterval(interval);
+        fadeOutGO(() => {
+          game.startGame();
+          if (currentMode && currentMode.init) currentMode.init(game);
+          requestAnimationFrame(gameLoop);
+        });
+      }, 500);
+    }
+  }, 1000);
 }
 
 function restartGame() {
-    // Cancelar animación del loop anterior si existe
-    if (typeof gameLoopId !== "undefined") {
-        cancelAnimationFrame(gameLoopId);
-    }
-
-    // Oculta overlays (Game Over, Escape)
-    const goPopup = document.getElementById("game-over");
-    if (goPopup) goPopup.style.display = "none";
-
-    const exitWarning = document.getElementById("exit-warning");
-    if (exitWarning) {
-        exitWarning.style.display = "none";
-        const exitBar = exitWarning.querySelector(".exit-bar");
-        if (exitBar) exitBar.style.width = "0%";
-        const exitMessage = document.getElementById("exit-message");
-        if (exitMessage) exitMessage.textContent = "Saliendo...";
-    }
-
-    // Borrar instancia previa del juego
-    game = null;
-
-    // Crear nueva instancia limpia
-    game = new Game(
-        canvasTetris,
-        rows,
-        cols,
-        cellSize,
-        space,
-        canvasNext,
-        canvasHold,
-        canvasLines,
-        canvasLevel,
-        canvasTime,
-        canvasScore
-    );
-
-    // Mostrar estado inicial congelado
-    game.initializeHUD();
-    game.boardTetris.draw();
-    game.next.draw2();
-    game.hold.draw2();
-
-    // Esperar cuenta regresiva antes de empezar
-    startCountdownAndGame();
+  cancelAnimationFrame(gameLoopId);
+  initGame();
+  game.startGame();
+  if (currentMode && currentMode.init) currentMode.init(game);
+  requestAnimationFrame(gameLoop);
 }
 
-// Botones
+// ----------------- UI: COUNTDOWN -----------------
+function drawCountdown(text) {
+  const ctx = canvasTetris.getContext("2d");
+  ctx.clearRect(0, 0, canvasTetris.width, canvasTetris.height);
+  ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+  ctx.fillRect(0, 0, canvasTetris.width, canvasTetris.height);
+  ctx.fillStyle = "#fff";
+  ctx.font = "48px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText(text, canvasTetris.width / 2, canvasTetris.height / 2);
+}
+
+function fadeOutGO(callback) {
+  const ctx = canvasTetris.getContext("2d");
+  let opacity = 1;
+  const fade = () => {
+    ctx.clearRect(0, 0, canvasTetris.width, canvasTetris.height);
+    ctx.fillStyle = `rgba(0, 0, 0, ${opacity})`;
+    ctx.fillRect(0, 0, canvasTetris.width, canvasTetris.height);
+    opacity -= 0.05;
+    if (opacity > 0) {
+      requestAnimationFrame(fade);
+    } else {
+      callback();
+    }
+  };
+  fade();
+}
+
+// ----------------- UI: GAME OVER -----------------
+function showGameOverOverlay() {
+  const goBox = document.getElementById("game-over");
+
+  // Detectar si se ganó o perdió
+  const isWin = (currentMode && currentMode.isWin && currentMode.isWin(game));
+
+  document.querySelector("#game-over h2").textContent = isWin ? "¡Ganaste!" : "¡Perdiste!";
+
+  document.getElementById("go-score").textContent = game.score;
+  document.getElementById("go-time").textContent = game.finalTimeFormatted || "00:00:00";
+  document.getElementById("go-level").textContent = game.level;
+  document.getElementById("go-lines").textContent = game.totalLines;
+
+  goBox.style.display = "flex";
+
+  enviarDatosAlServidor(
+    {
+      puntaje: game.score,
+      tiempo: game.finalTimeFormatted || "00:00:00",
+      nivel: game.level,
+      lineas: game.totalLines,
+      modo: selectedMode // opcional, guardar el modo
+    },
+    "/tetramin-main/src/web/backend/guardar_datos_juego.php"
+  );
+}
+
+
+// ----------------- BOTONES -----------------
 document.getElementById("retry-button").addEventListener("click", () => {
-    document.getElementById("game-over").style.display = "none";
-    restartGame();
+  document.getElementById("game-over").style.display = "none";
+  restartGame();
 });
 
 document.getElementById("exit-button").addEventListener("click", () => {
-    window.location.href = "/Tetris-front/main_page/main_registrados.php";
+  window.location.replace("../main_page/main_registrados.php");
 });
 
-startCountdownAndGame();
+// ----------------- ARRANQUE -----------------
+(async () => {
+  await loadMode();
+  initGame();
+  startCountdownAndGame();
+})();

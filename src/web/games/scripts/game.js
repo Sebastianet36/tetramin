@@ -1,9 +1,9 @@
-import { TetrominosBag } from "/Tetris-front/tetramin/scripts/tetromino.js";
-import { BoardTetris, BoardNext, BoardHold } from "/Tetris-front/tetramin/scripts/boardTetris.js";
-import { getSRSKicks } from "/Tetris-front/tetramin/scripts/srs.js";
+import { TetrominosBag } from "./tetromino.js";
+import { BoardTetris, BoardNext, BoardHold } from "./boardTetris.js";
+import { getSRSKicks } from "./srs.js";
 
 export class Game {
-    constructor(canvas, rows, cols, cellSize, space, canvasNext, canvasHold, canvasLines, canvasLevel, canvasTime, scoreSpan) {
+    constructor(canvas, rows, cols, cellSize, space, canvasNext, canvasHold, canvasLines, canvasLevel, canvasTime, canvasScore) {
         this.boardTetris = new BoardTetris(canvas, rows, cols, cellSize, space);
         this.tetrominosBag = new TetrominosBag(canvas, cellSize);
         this.currentTetromino = null;
@@ -34,9 +34,11 @@ export class Game {
 
         this.canvasLinesCtx = canvasLines.getContext("2d");
         this.canvasLevelCtx = canvasLevel.getContext("2d");
-        this.canvasScoreCtx = scoreSpan.getContext("2d");
+        this.canvasScoreCtx = canvasScore.getContext("2d");
         this.canvasTimeCtx = canvasTime.getContext("2d");
     }
+
+
 
     update() {
         if (!this.started) return;
@@ -275,7 +277,7 @@ export class Game {
         const tetrominoPositions = this.currentTetromino.currentPositions();
         for (let i = 0; i < tetrominoPositions.length; i++) {
             const position = this.boardTetris.getCoordinates(tetrominoPositions[i].col, tetrominoPositions[i].row + dropDistance);
-            this.boardTetris.drawSquere(position.x, position.y, this.boardTetris.cellSize, "#000", "white", 20);
+            this.boardTetris.drawSquare(position.x, position.y, this.boardTetris.cellSize, "#000", "white", 20);
         }
     }
     updateTextCanvas(ctx, text) {
