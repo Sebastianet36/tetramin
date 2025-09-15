@@ -67,16 +67,21 @@ body::after {
 .login-container {
     max-width: 420px;
     width: 90%;
-    margin: 10vh auto;
+    height: 90vh;                /* ahora ocupa el 90% del alto de la pantalla */
+    display: flex;               /* flexbox interno */
+    flex-direction: column;      /* apila verticalmente */
+    justify-content: space-between; /* reparte los elementos y evita que salgan */
     background: #000000;
-    padding: 3rem 2.5rem;
+    padding: 2rem;               /* padding razonable */
     border: 2px solid transparent;
     border-radius: 16px;
     position: relative;
     overflow: hidden;
     animation: container-entrance 1.2s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(10px);
+    box-sizing: border-box;
 }
+
 
 @keyframes container-entrance {
     from {
@@ -136,7 +141,6 @@ body::after {
 .login-container h2 {
     color: #00ffff;
     text-align: center;
-    margin-bottom: 2.5rem;
     text-transform: uppercase;
     letter-spacing: 3px;
     font-size: 1.8rem;
@@ -159,8 +163,8 @@ body::after {
 .login-container label {
     display: block;
     color: #00ffff;
-    margin-bottom: 0.8rem;
-    margin-top: 1.5rem;
+    margin-bottom: 0.6rem;
+    margin-top: 1.2rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;

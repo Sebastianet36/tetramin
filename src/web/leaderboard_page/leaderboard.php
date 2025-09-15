@@ -47,6 +47,9 @@ $conn->close();
     <link rel="stylesheet" href="leaderboard.css">
 </head>
 <body>
+    <div class="header">
+        <a href="../main_page/main_registrados.php" class="back-button">Atras</a>
+    </div>
     <div class="top-container">
         <h2>Top 10 Global</h2>
         <ol>
