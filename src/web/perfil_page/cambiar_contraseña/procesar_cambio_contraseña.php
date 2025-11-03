@@ -7,7 +7,7 @@ if ($conexion->connect_error) {
 }
 
 if (!isset($_SESSION['id_usuario'])) {
-  header("Location: login.php");
+  header("Location: ../../signin_page\signin.html");
   exit();
 }
 

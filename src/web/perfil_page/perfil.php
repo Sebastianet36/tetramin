@@ -44,7 +44,10 @@ $nombre_usuario = isset($_SESSION['nombre_usuario']) ? $_SESSION['nombre_usuario
                         <span class="stat-value">42</span>
                     </div>
                     <div class="stat-item">
-                        <a href="./cambiar_contraseña\cambiar_contraseña.php">Cambiar contraseña</a>
+                        <a href="./cambiar_contraseña\cambiar_contraseña.php" class="stat-label">Cambiar contraseña</a>
+                    </div>
+                    <div class="stat-item">
+                        <a href="./p_config_page/p_config.html" class="stat-label">Configuración</a>
                     </div>
                 </div>
             </div>
@@ -127,11 +130,6 @@ $nombre_usuario = isset($_SESSION['nombre_usuario']) ? $_SESSION['nombre_usuario
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Configurations Section -->
-        <div class="configurations">
-            <h2 class="config-title">Configuracion</h2>
         </div>
     </div>
 </body>
