@@ -49,6 +49,9 @@ $nombre_usuario = isset($_SESSION['nombre_usuario']) ? $_SESSION['nombre_usuario
                     <div class="stat-item">
                         <a href="./p_config_page/p_config.html" class="stat-label">Configuración</a>
                     </div>
+                    <div class="stat-item">
+                        <a href="../signin_page/signin.html" class="stat-label">Cerrar Sesión</a>
+                    </div>
                 </div>
             </div>
 

@@ -83,13 +83,6 @@ INSERT INTO modojuego (nombre_modo) VALUES
 ('Excavar'),
 ('Chill-Out');
 
--- Insertar modos de juego básicos
-INSERT INTO modojuego (nombre_modo) VALUES 
-('Clásico'),
-('Carrera'),
-('Excavar'),
-('Chill-Out');
-
 DELIMITER //
 CREATE PROCEDURE GuardarRecord(
     IN p_id_usuario INT,
