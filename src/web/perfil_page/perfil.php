@@ -44,7 +44,7 @@ $nombre_usuario = isset($_SESSION['nombre_usuario']) ? $_SESSION['nombre_usuario
                         <span class="stat-value">42</span>
                     </div>
                     <div class="stat-item">
-                        <a href="./cambiar_contraseña\cambiar_contraseña.php" class="stat-label">Cambiar contraseña</a>
+                        <a href="./cambiar_contraseña/cambiar_contraseña.php" class="stat-label">Cambiar contraseña</a>
                     </div>
                     <div class="stat-item">
                         <a href="./p_config_page/p_config.html" class="stat-label">Configuración</a>

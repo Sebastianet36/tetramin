@@ -14,7 +14,7 @@ body {
     align-items: center;
     justify-content: center;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden; /* mantiene bloqueado el scroll horizontal */
 }
 
 /* Animated background matrix */
@@ -64,24 +64,27 @@ body::after {
     66% { transform: translate(20px, -10px) rotate(240deg); }
 }
 
+
+/* Contenedor del login */
 .login-container {
     max-width: 420px;
     width: 90%;
-    height: 90vh;                /* ahora ocupa el 90% del alto de la pantalla */
-    display: flex;               /* flexbox interno */
-    flex-direction: column;      /* apila verticalmente */
-    justify-content: space-between; /* reparte los elementos y evita que salgan */
+    /* ❌ eliminar height fija que cortaba el contenido */
+    /* height: 90vh; */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* que empiece arriba */
     background: #000000;
-    padding: 2rem;               /* padding razonable */
+    padding: 2rem;
     border: 2px solid transparent;
     border-radius: 16px;
     position: relative;
-    overflow: hidden;
+    overflow: hidden; /* mantiene los efectos visuales */
     animation: container-entrance 1.2s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(10px);
     box-sizing: border-box;
+    margin: 4rem 0; /* ✅ agrega un margen arriba y abajo para que no toque el borde */
 }
-
 
 @keyframes container-entrance {
     from {
@@ -488,4 +491,32 @@ body::after {
         gap: 1rem;
         align-items: flex-start;
     }
+
+}
+/* === Scrollbar Estilo Cyberpunk (Referencia TC2000) === */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+  border-left: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00ffff, #0080ff);
+  border-radius: 3px;
+  border: 2px solid #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ff00ff, #0080ff);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* === Selección de texto personalizada === */
+::selection {
+  background: rgba(0, 255, 255, 0.3);
+  color: #00ffff;
+  text-shadow: 0 0 10px #00ffff;
 }

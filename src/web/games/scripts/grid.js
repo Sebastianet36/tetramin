@@ -66,7 +66,7 @@ export class Grid{
     printMatriz(){
         let mostrar = "";
         this.matriz.forEach((row) => {
-            mostrar += row.join(" ") + "\n";
+            mostrar += row.join(" ") + "/n";
         });
         console.log(mostrar);
     }

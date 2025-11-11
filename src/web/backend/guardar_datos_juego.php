@@ -60,10 +60,10 @@ $id_usuario = $row_usuario['id_usuario'];
 
 // Convertir el tiempo de formato MM:SS:ms a segundos
 $duracion_segundos = 0;
-if (preg_match('/^(\d{1,2}):(\d{1,2}):(\d{1,2})$/', $tiempo, $matches)) {
+if (preg_match('/^(/d{1,2}):(/d{1,2}):(/d{1,2})$/', $tiempo, $matches)) {
     // Formato MM:SS:ms
     $duracion_segundos = (int)$matches[1] * 60 + (int)$matches[2] + (int)$matches[3] / 100;
-} elseif (preg_match('/^(\d{1,2}):(\d{1,2})$/', $tiempo, $matches)) {
+} elseif (preg_match('/^(/d{1,2}):(/d{1,2})$/', $tiempo, $matches)) {
     // Formato MM:SS
     $duracion_segundos = (int)$matches[1] * 60 + (int)$matches[2];
 } else {
