@@ -417,3 +417,204 @@ body::after {
     color: #00ffff;
     text-shadow: 0 0 10px #00ffff;
 }
+
+.glitch-reset::before {
+    animation: none !important;
+}
+.glitch-reset {
+    animation: none !important;
+}
+
+.inside-header {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 5; /* Asegura que quede sobre efectos */
+}
+
+.top-container .back-button {
+    margin: 0;
+}
+
+/* =========================================================
+   ESTRUCTURA INTERNA DEL ITEM
+   ========================================================= */
+
+.top-container li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.top-container li .rank {
+    flex: 0 0 48px;
+}
+
+/* -----------------------------------------------
+   NAME (columna central)
+   ----------------------------------------------- */
+.top-container li .name {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 700;
+    color: #00ffff;
+    font-size: 1rem;
+}
+
+/* -----------------------------------------------
+   META (2 valores a la derecha)
+   ----------------------------------------------- */
+
+.top-container li .meta {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* =========================================================
+   PRIMARY (valor importante — VISTOSO)
+   ========================================================= */
+
+.top-container li .meta .primary {
+    font-weight: 900;
+    background: linear-gradient(45deg, #00ffff, #ff00ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    padding: 0.25rem 0.8rem;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 0, 255, 0.35);
+    font-size: 1rem;
+    letter-spacing: 1px;
+}
+
+/* =========================================================
+   SECONDARY (valor complementario)
+   ========================================================= */
+
+.top-container li .meta .secondary {
+    font-weight: 600;
+    color: #0080ff;
+    background: linear-gradient(45deg, #00ffff, #0080ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    padding: 0.2rem 0.7rem;
+    border-radius: 14px;
+    border: 1px solid rgba(0,255,255,0.25);
+
+    font-size: 0.9rem;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 600px) {
+    .top-container li { gap: 0.5rem; }
+    .top-container li .rank { flex: 0 0 36px; }
+
+    .top-container li .meta .primary,
+    .top-container li .meta .secondary {
+        font-size: 0.85rem;
+        padding: 0.15rem 0.5rem;
+    }
+}
+
+
+.mode-switch {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}
+
+.switch-btn {
+    padding: 0.7rem 1.2rem;
+    background: #000;
+    border: 2px solid #00ffff;
+    border-radius: 8px;
+    color: #00ffff;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: 0.3s ease;
+}
+
+.switch-btn:hover {
+    background: linear-gradient(45deg, #00ffff, #ff00ff);
+    color: #000;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0,255,255,0.5);
+}
+
+/* Estructura interna de cada li: 3 columnas */
+.top-container li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.top-container li .rank {
+    flex: 0 0 48px; /* espacio fijo */
+}
+
+.top-container li .name {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 700;
+    color: #00ffff;
+}
+
+.top-container li .meta {
+    flex: 0 0 auto;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* Apariencia para el valor primario (tiempo en sprint / puntos en otros) */
+.top-container li .meta .primary {
+    font-weight: 900;
+    /* usar gradiente y clipping similar al puntaje original */
+    background: linear-gradient(45deg, #00ffff, #0080ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    padding: 0.15rem 0.6rem;
+    border-radius: 14px;
+    font-size: 0.98rem;
+}
+
+/* Apariencia para el valor secundario (puntos o líneas) */
+.top-container li .meta .secondary {
+    font-weight: 700;
+    color: #0080ff;
+    background: linear-gradient(45deg, #00ffff, #0080ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    padding: 0.2rem 0.6rem;
+    border-radius: 14px;
+    border: 1px solid rgba(0,255,255,0.15);
+    font-size: 0.9rem;
+}
+
+/* Ajustes responsivos para que no colapse en móvil */
+@media (max-width: 600px) {
+    .top-container li {
+        gap: 0.5rem;
+    }
+    .top-container li .rank { flex: 0 0 36px; }
+    .top-container li .meta { gap: 0.4rem; }
+    .top-container li .meta .primary,
+    .top-container li .meta .secondary { font-size: 0.85rem; padding: 0.15rem 0.5rem; }
+}

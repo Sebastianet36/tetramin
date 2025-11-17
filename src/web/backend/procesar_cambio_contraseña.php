@@ -1,5 +1,5 @@
 <?php
-session_start();
+include_once __DIR__ . '/../backend/session_init.php';
 include_once __DIR__ . '/../backend/conn.php';
 
 if (!isset($_SESSION['id_usuario'])) {

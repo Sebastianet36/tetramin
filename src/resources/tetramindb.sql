@@ -11,6 +11,7 @@ CREATE TABLE usuarios (
   es_admin TINYINT(1) NOT NULL,
   usuario_activo TINYINT(1) NOT NULL,
   ubicacion VARCHAR(255) NOT NULL,
+  token_recordar VARCHAR(255) NULL;
   PRIMARY KEY (id_usuario)
 ) ENGINE=InnoDB;
 
@@ -61,7 +62,7 @@ CREATE TABLE record (
   id_usuario INT(11) NOT NULL,
   fecha_jugada DATETIME NOT NULL,
   puntaje INT(11) NOT NULL,
-  duracion INT(11) NOT NULL,
+  duracion DECIMAL(6,2) NOT NULL,
   nivel INT(11) NOT NULL,
   lineas INT(11) NOT NULL,
   id_modo INT(11) NOT NULL,
