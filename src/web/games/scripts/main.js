@@ -166,10 +166,26 @@ function showGameOverOverlay() {
       tiempo: game.finalTimeFormatted || "00:00:00",
       nivel: game.level,
       lineas: game.totalLines,
-      modo: selectedMode // opcional, guardar el modo
+      modo: selectedMode // datos_partida.js mapeará a id_modo
     },
     "/tetramin-main/src/web/backend/guardar_datos_juego.php"
-  );
+  ).then(resp => {
+    if (!resp || !resp.success) return;
+    // Si existe previous_record, mostrar comparación
+    const prev = resp.previous_record;
+    const cur = resp.record;
+    if (resp.nuevo_record) {
+      // ejemplo simple: mostrar en overlay
+      const el = document.getElementById('go-prev-record');
+      if (el) el.textContent = prev ? `Anterior: ${prev.puntaje}` : 'Anterior: -';
+      const el2 = document.getElementById('go-new-record');
+      if (el2) el2.textContent = `Nuevo: ${cur ? cur.puntaje : game.score}`;
+    } else {
+      // mostrar mensaje con anterior y actual
+      const el = document.getElementById('go-prev-record');
+      if (el) el.textContent = prev ? `Record actual: ${prev.puntaje}` : 'Record actual: -';
+    }
+  });
 }
 
 

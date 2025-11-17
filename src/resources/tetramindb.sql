@@ -78,10 +78,10 @@ CREATE TABLE record (
 
 -- Insertar modos de juego básicos
 INSERT INTO modojuego (nombre_modo) VALUES 
-('Clásico'),
+('Clasico'),
 ('Carrera'),
-('Excavar'),
-('Chill-Out');
+('Cheese'),
+('Supervivencia');
 
 DELIMITER //
 CREATE PROCEDURE GuardarRecord(
