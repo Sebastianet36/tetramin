@@ -11,7 +11,7 @@ CREATE TABLE usuarios (
   es_admin TINYINT(1) NOT NULL,
   usuario_activo TINYINT(1) NOT NULL,
   ubicacion VARCHAR(255) NOT NULL,
-  token_recordar VARCHAR(255) NULL;
+  token_recordar VARCHAR(255) NULL,
   PRIMARY KEY (id_usuario)
 ) ENGINE=InnoDB;
 
@@ -88,7 +88,7 @@ DELIMITER //
 CREATE PROCEDURE GuardarRecord(
     IN p_id_usuario INT,
     IN p_puntaje INT,
-    IN p_duracion INT,
+    IN p_duracion DECIMAL(6,2),
     IN p_nivel INT,
     IN p_lineas INT,
     IN p_id_modo INT,
@@ -96,26 +96,70 @@ CREATE PROCEDURE GuardarRecord(
 )
 BEGIN
     DECLARE v_id_record INT;
-    DECLARE v_puntaje_actual INT;
+    DECLARE v_duracion DECIMAL(6,2);
+    DECLARE v_lineas INT;
+    DECLARE v_fecha DATETIME;
 
-    SELECT id_record, puntaje INTO v_id_record, v_puntaje_actual
+    -- Buscar record existente del usuario para ese modo
+    SELECT id_record, duracion, lineas, fecha_jugada 
+    INTO v_id_record, v_duracion, v_lineas, v_fecha
     FROM record
     WHERE id_usuario = p_id_usuario AND id_modo = p_id_modo
     LIMIT 1;
 
-    IF v_id_record IS NOT NULL THEN
-        IF p_puntaje > v_puntaje_actual THEN
-            UPDATE record
-            SET puntaje = p_puntaje, duracion = p_duracion, nivel = p_nivel, lineas = p_lineas, fecha_jugada = NOW()
-            WHERE id_record = v_id_record;
-            SET p_es_nuevo_record = TRUE;
-        ELSE
-            SET p_es_nuevo_record = FALSE;
-        END IF;
-    ELSE
+    -- Si no hay record previo → insertar uno nuevo
+    IF v_id_record IS NULL THEN
         INSERT INTO record (id_usuario, fecha_jugada, puntaje, duracion, nivel, lineas, id_modo)
         VALUES (p_id_usuario, NOW(), p_puntaje, p_duracion, p_nivel, p_lineas, p_id_modo);
         SET p_es_nuevo_record = TRUE;
+    ELSE
+        -- MODO CARRERA (Sprint 40)
+        IF p_id_modo = 2 THEN
+
+            -- Regla 1: MENOR tiempo es mejor
+            IF p_duracion < v_duracion THEN
+                UPDATE record
+                SET puntaje = p_puntaje,
+                    duracion = p_duracion,
+                    nivel = p_nivel,
+                    lineas = p_lineas,
+                    fecha_jugada = NOW()
+                WHERE id_record = v_id_record;
+                SET p_es_nuevo_record = TRUE;
+
+            -- Regla 2: MISMO tiempo → más líneas es mejor
+            ELSEIF p_duracion = v_duracion AND p_lineas > v_lineas THEN
+                UPDATE record
+                SET puntaje = p_puntaje,
+                    duracion = p_duracion,
+                    nivel = p_nivel,
+                    lineas = p_lineas,
+                    fecha_jugada = NOW()
+                WHERE id_record = v_id_record;
+                SET p_es_nuevo_record = TRUE;
+
+            -- Regla 3: MISMO tiempo, MISMAS líneas → el más antiguo queda (NO se actualiza)
+            ELSE
+                SET p_es_nuevo_record = FALSE;
+            END IF;
+
+        -- OTROS MODOS NORMALES (mayor puntaje)
+        ELSE
+            IF p_puntaje > (SELECT puntaje FROM record WHERE id_record = v_id_record) THEN
+                UPDATE record
+                SET puntaje = p_puntaje,
+                    duracion = p_duracion,
+                    nivel = p_nivel,
+                    lineas = p_lineas,
+                    fecha_jugada = NOW()
+                WHERE id_record = v_id_record;
+
+                SET p_es_nuevo_record = TRUE;
+            ELSE
+                SET p_es_nuevo_record = FALSE;
+            END IF;
+        END IF;
     END IF;
+
 END //
 DELIMITER ;

@@ -56,27 +56,30 @@ function tiempoAsegundos(tiempoStr) {
     if (tiempoStr == null) return 0;
     tiempoStr = String(tiempoStr).trim();
 
-    // Separar por ':'
     const parts = tiempoStr.split(':').map(p => p.trim());
+
     if (parts.length === 3) {
         const mm = parseInt(parts[0], 10) || 0;
         const ss = parseInt(parts[1], 10) || 0;
-        const cc = parseInt(parts[2], 10) || 0; // centésimas según tu formato (ms/10)
-        // Convertimos centésimas a segundos (cc / 100)
+        const cc = parseInt(parts[2], 10) || 0; 
+        // centésimas → segundos con 2 decimales
         const total = mm * 60 + ss + (cc / 100);
-        return Math.round(total); // la DB tiene duracion INT, guardamos segundos redondeados
-    } else if (parts.length === 2) {
+        return Number(total.toFixed(2)); // AHORA SI: decimal
+    }
+    else if (parts.length === 2) {
         const mm = parseInt(parts[0], 10) || 0;
         const ss = parseInt(parts[1], 10) || 0;
         const total = mm * 60 + ss;
-        return Math.round(total);
-    } else {
-        // si viene número entero o string de segundos
-        const asNumber = Number(tiempoStr);
-        if (!isNaN(asNumber)) return Math.round(asNumber);
+        return Number(total.toFixed(2)); 
     }
+    else {
+        const asNumber = Number(tiempoStr);
+        if (!isNaN(asNumber)) return Number(asNumber.toFixed(2));
+    }
+
     return 0;
 }
+
 
 /**
  * Envía los datos del juego al backend y devuelve la respuesta completa (JSON).
